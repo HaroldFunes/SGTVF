@@ -1,0 +1,6 @@
+python -m pip install "pymongo[srv]==3.12"
+pip install python-dotenv
+pip install fastapi
+pip install uvicorn
+pip install PyJWT
+pip install firebase-admin==6.9.0
