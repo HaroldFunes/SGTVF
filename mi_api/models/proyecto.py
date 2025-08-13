@@ -23,8 +23,6 @@ class Proyecto(BaseModel):
         default_factory=datetime.now,
         description="Fecha y hora de la última actualización del proyecto"
     )
-    # Referencia a la colección Estado_Proyecto.
-    # Asumo que se referencia el ID del estado.
     estado: str = Field(
         default="",
         description="Identificador del estado actual del proyecto (FK a la colección Estado_Proyecto)"

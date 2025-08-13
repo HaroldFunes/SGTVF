@@ -40,13 +40,11 @@ async def create_usuario(usuario: Usuario) -> Usuario:
         if existing_user:
             raise HTTPException(status_code=400, detail="User with this email already exists")
         
-        # Opcional: Verificar si el firebase_uid ya existe para evitar duplicados
         existing_firebase_uid = coll.find_one({"firebase_uid": usuario.firebase_uid})
         if existing_firebase_uid:
             raise HTTPException(status_code=400, detail="User with this Firebase UID already exists")
 
         usuario_dict = usuario.model_dump(exclude={"id","password"})
-        # Asegurarse de que fecha_registro se guarde como datetime
         usuario_dict["fecha_registro"] = usuario.fecha_registro
         
         inserted = coll.insert_one(usuario_dict)
@@ -126,8 +124,6 @@ async def update_usuario(usuario_id: str, usuario: Usuario) -> Usuario:
             raise HTTPException(status_code=400, detail="User with this email already exists")
 
         usuario_dict = usuario.model_dump(exclude={"id"})
-        # Actualizar la fecha de actualización si es necesario
-        # usuario_dict["fecha_actualizacion"] = datetime.now() # Si tuvieras un campo de actualización
         
         result = coll.update_one(
             {"_id": ObjectId(usuario_id)},

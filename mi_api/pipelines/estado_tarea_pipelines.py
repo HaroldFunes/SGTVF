@@ -1,7 +1,6 @@
 from bson import ObjectId
 
 def get_estados_tarea_pipeline() -> list:
-    """Pipeline para obtener todos los estados de tarea."""
     return [
         {
             "$project": {
@@ -15,7 +14,6 @@ def get_estados_tarea_pipeline() -> list:
     ]
 
 def get_estado_tarea_by_id_pipeline(estado_tarea_id: str) -> list:
-    """Pipeline para obtener un estado de tarea específico por su ID."""
     return [
         {"$match": {"_id": ObjectId(estado_tarea_id)}},
         {
@@ -29,7 +27,6 @@ def get_estado_tarea_by_id_pipeline(estado_tarea_id: str) -> list:
     ]
 
 def validate_estado_tarea_exists_pipeline(estado_tarea_id: str) -> list:
-    """Pipeline para validar que un estado de tarea existe por su ID."""
     return [
         {"$match": {"_id": ObjectId(estado_tarea_id)}},
         {"$project": {"_id": 1}},

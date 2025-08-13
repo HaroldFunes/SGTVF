@@ -10,13 +10,11 @@ async def create_proyecto(proyecto: Proyecto) -> Proyecto:
     try:
         proyecto.nombre_proyecto = proyecto.nombre_proyecto.strip()
 
-        # Opcional: Verificar si el nombre del proyecto ya existe
         existing_project = coll.find_one({"nombre_proyecto": proyecto.nombre_proyecto})
         if existing_project:
             raise HTTPException(status_code=400, detail="Project with this name already exists")
         
         proyecto_dict = proyecto.model_dump(exclude={"id"})
-        # Asegurarse que las fechas se guarden correctamente
         proyecto_dict["fecha_creacion"] = proyecto.fecha_creacion
         proyecto_dict["fecha_actualizacion"] = proyecto.fecha_actualizacion
         
@@ -58,7 +56,6 @@ async def update_proyecto(proyecto_id: str, proyecto: Proyecto) -> Proyecto:
             raise HTTPException(status_code=400, detail="Project with this name already exists")
 
         proyecto_dict = proyecto.model_dump(exclude={"id"})
-        # Siempre actualizar la fecha_actualizacion al modificar
         proyecto_dict["fecha_actualizacion"] = datetime.now()
         
         result = coll.update_one(
@@ -74,15 +71,11 @@ async def update_proyecto(proyecto_id: str, proyecto: Proyecto) -> Proyecto:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error updating project: {str(e)}")
 
-# Manteniendo la opción de desactivar como en tu plantilla
 async def deactivate_proyecto(proyecto_id: str) -> Proyecto:
     try:
-        # Asumo que el modelo Proyecto podría tener un campo 'activo' o 'estado_activo'
-        # que podría usarse para desactivar. Si no, esta función necesitaría una adaptación.
-        # Por simplicidad, si no hay un campo 'activo', se podría cambiar el 'estado'.
         result = coll.update_one(
             {"_id": ObjectId(proyecto_id)},
-            {"$set": {"estado": "desactivado"}} # O a un ID de estado "desactivado"
+            {"$set": {"estado": "desactivado"}}
         )
         if result.modified_count == 0:
             raise HTTPException(status_code=404, detail="Project not found")

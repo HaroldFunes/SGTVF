@@ -29,6 +29,6 @@ class Login(BaseModel):
             raise ValueError("La contraseña debe contener al menos una letra mayúscula.")
         if not re.search(r"\d", value):
             raise ValueError("La contraseña debe contener al menos un número.")
-        if not re.search(r"[!@#$%^&*?]", value): # Agregué algunos caracteres especiales comunes
+        if not re.search(r"[!@#$%^&*?]", value):
             raise ValueError("La contraseña debe contener al menos un carácter especial (!@#$%^&*?).")
         return value

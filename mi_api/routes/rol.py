@@ -17,10 +17,6 @@ async def create_new_rol(
     request: Request,
     rol_data: Rol
 ):
-    """
-    Crea un nuevo rol en el sistema.
-    Requiere permisos de administrador.
-    """
     result = await create_rol(rol_data)
     return result
 
@@ -31,10 +27,6 @@ async def get_all_roles(
     skip: int = Query(default=0, ge=0, description="Número de registros a omitir"),
     limit: int = Query(default=50, ge=1, le=100, description="Número de registros a obtener")
 ):
-    """
-    Obtiene una lista de todos los roles disponibles.
-    Requiere permisos de administrador.
-    """
     result = await get_roles()
     return result[skip : skip + limit]
 
@@ -44,10 +36,6 @@ async def get_single_rol(
     request: Request,
     rol_id: str
 ):
-    """
-    Obtiene los detalles de un rol específico por su ID.
-    Requiere permisos de administrador.
-    """
     result = await get_rol_by_id(rol_id)
     return result
 
@@ -58,10 +46,6 @@ async def update_single_rol(
     rol_id: str,
     rol_data: Rol
 ):
-    """
-    Actualiza un rol existente por su ID.
-    Requiere permisos de administrador.
-    """
     result = await update_rol(rol_id, rol_data)
     return result
 
@@ -71,9 +55,5 @@ async def delete_single_rol(
     request: Request,
     rol_id: str
 ):
-    """
-    Elimina un rol por su ID.
-    Requiere permisos de administrador.
-    """
     result = await delete_rol(rol_id)
     return result

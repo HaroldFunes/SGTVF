@@ -17,10 +17,6 @@ async def create_new_usuario(
     request: Request,
     usuario_data: Usuario
 ):
-    """
-    Crea un nuevo usuario en el sistema.
-    Requiere permisos de administrador.
-    """
     result = await create_usuario(usuario_data)
     return result
 
@@ -31,10 +27,6 @@ async def get_all_usuarios(
     skip: int = Query(default=0, ge=0, description="Número de registros a omitir"),
     limit: int = Query(default=50, ge=1, le=100, description="Número de registros a obtener")
 ):
-    """
-    Obtener todos los usuarios del sistema.
-    Requiere permisos de administrador.
-    """
     result = await get_usuarios()
     return result[skip : skip + limit]
 
@@ -44,11 +36,6 @@ async def get_single_usuario(
     request: Request,
     usuario_id: str
 ):
-    """
-    Obtener un usuario específico por su ID.
-    - Admin: cualquier usuario
-    - Usuario: solo sus propios datos
-    """
     is_admin = getattr(request.state, 'admin', False)
     requesting_user_id = request.state.id
 
@@ -65,11 +52,6 @@ async def update_single_usuario(
     usuario_id: str,
     usuario_data: Usuario
 ):
-    """
-    Actualiza un usuario existente por su ID.
-    - Admin: cualquier usuario
-    - Usuario: solo sus propios datos
-    """
     is_admin = getattr(request.state, 'admin', False)
     requesting_user_id = request.state.id
 
@@ -92,9 +74,5 @@ async def delete_single_usuario(
     request: Request,
     usuario_id: str
 ):
-    """
-    Elimina un usuario por su ID.
-    Requiere permisos de administrador.
-    """
     result = await delete_usuario(usuario_id)
     return result
