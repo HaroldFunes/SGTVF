@@ -40,10 +40,6 @@ async def create_usuario(usuario: Usuario) -> Usuario:
         if existing_user:
             raise HTTPException(status_code=400, detail="User with this email already exists")
         
-        existing_firebase_uid = coll.find_one({"firebase_uid": usuario.firebase_uid})
-        if existing_firebase_uid:
-            raise HTTPException(status_code=400, detail="User with this Firebase UID already exists")
-
         usuario_dict = usuario.model_dump(exclude={"id","password"})
         usuario_dict["fecha_registro"] = usuario.fecha_registro
         

@@ -10,7 +10,6 @@ async def create_tarea(tarea: Tarea) -> Tarea:
     try:
         tarea.actividad = tarea.actividad.strip()
 
-        
         tarea_dict = tarea.model_dump(exclude={"id"})
         tarea_dict["fecha_creacion"] = tarea.fecha_creacion
         tarea_dict["fecha_actualizacion"] = tarea.fecha_actualizacion
