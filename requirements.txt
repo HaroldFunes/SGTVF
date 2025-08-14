@@ -1,0 +1,7 @@
+pymongo==3.12
+python-dotenv
+fastapi
+uvicorn
+PyJWT
+firebase-admin==6.9.0
+pytest
