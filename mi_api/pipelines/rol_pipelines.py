@@ -1,7 +1,6 @@
 from bson import ObjectId
 
 def get_roles_pipeline() -> list:
-    """Pipeline para obtener todos los roles."""
     return [
         {
             "$project": {
@@ -14,7 +13,6 @@ def get_roles_pipeline() -> list:
     ]
 
 def get_rol_by_id_pipeline(rol_id: str) -> list:
-    """Pipeline para obtener un rol específico por su ID."""
     return [
         {"$match": {"_id": ObjectId(rol_id)}},
         {
@@ -27,7 +25,6 @@ def get_rol_by_id_pipeline(rol_id: str) -> list:
     ]
 
 def validate_rol_exists_pipeline(rol_id: str) -> list:
-    """Pipeline para validar que un rol existe por su ID."""
     return [
         {"$match": {"_id": ObjectId(rol_id)}},
         {"$project": {"_id": 1}},
@@ -35,7 +32,6 @@ def validate_rol_exists_pipeline(rol_id: str) -> list:
     ]
 
 def validate_rol_by_name_exists_pipeline(nombre_rol: str) -> list:
-    """Pipeline para validar que un rol existe por su nombre (case-insensitive)."""
     return [
         {"$match": {"nombre_rol": nombre_rol.lower()}},
         {"$project": {"_id": 1}},

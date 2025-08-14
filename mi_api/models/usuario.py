@@ -18,8 +18,6 @@ class Usuario(BaseModel):
         description="Nombre completo del usuario",
         #pattern=r"^([A-Za-zÁÉÍÓÚÑáéíóúñ']+-| +)$"
     )
-    # Referencia a la colección Rol. Asumo que se referencia el ID del rol.
-    # Si se referenciara el nombre_rol, el tipo podría ser str y la descripción cambiaría.
     rol: str = Field(
         default="",
         description="Identificador del rol asignado al usuario (FK a la colección Rol)"
@@ -30,8 +28,7 @@ class Usuario(BaseModel):
         description="Fecha y hora de registro del usuario"
     )
 
-    from pydantic import Field # Asegúrate de importar Field de pydantic
-
+    from pydantic import Field
     password: str = Field(
         min_length=8,
         max_length=64,
@@ -45,6 +42,6 @@ class Usuario(BaseModel):
             raise ValueError("La contraseña debe contener al menos una letra mayúscula.")
         if not re.search(r"\d", value):
             raise ValueError("La contraseña debe contener al menos un número.")
-        if not re.search(r"[!@#$%^&*?]", value): # Agregué algunos caracteres especiales comunes
+        if not re.search(r"[!@#$%^&*?]", value):
             raise ValueError("La contraseña debe contener al menos un carácter especial (!@#$%^&*?).")
         return value

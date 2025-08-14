@@ -1,7 +1,6 @@
 from bson import ObjectId
 
 def get_estados_proyecto_pipeline() -> list:
-    """Pipeline para obtener todos los estados de proyecto."""
     return [
         {
             "$project": {
@@ -15,7 +14,6 @@ def get_estados_proyecto_pipeline() -> list:
     ]
 
 def get_estado_proyecto_by_id_pipeline(estado_proyecto_id: str) -> list:
-    """Pipeline para obtener un estado de proyecto específico por su ID."""
     return [
         {"$match": {"_id": ObjectId(estado_proyecto_id)}},
         {
@@ -29,7 +27,6 @@ def get_estado_proyecto_by_id_pipeline(estado_proyecto_id: str) -> list:
     ]
 
 def validate_estado_proyecto_exists_pipeline(estado_proyecto_id: str) -> list:
-    """Pipeline para validar que un estado de proyecto existe por su ID."""
     return [
         {"$match": {"_id": ObjectId(estado_proyecto_id)}},
         {"$project": {"_id": 1}},

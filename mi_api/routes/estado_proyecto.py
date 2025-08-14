@@ -17,10 +17,6 @@ async def create_new_estado_proyecto(
     request: Request,
     estado_proyecto_data: EstadoProyecto
 ):
-    """
-    Crea un nuevo estado para proyectos.
-    Requiere permisos de administrador.
-    """
     result = await create_estado_proyecto(estado_proyecto_data)
     return result
 
@@ -31,10 +27,6 @@ async def get_all_estados_proyecto(
     skip: int = Query(default=0, ge=0, description="Número de registros a omitir"),
     limit: int = Query(default=50, ge=1, le=100, description="Número de registros a obtener")
 ):
-    """
-    Obtiene una lista de todos los estados de proyecto.
-    Requiere permisos de administrador.
-    """
     result = await get_estados_proyecto()
     return result[skip : skip + limit]
 
@@ -44,10 +36,6 @@ async def get_single_estado_proyecto(
     request: Request,
     estado_proyecto_id: str
 ):
-    """
-    Obtiene los detalles de un estado de proyecto específico por su ID.
-    Requiere permisos de administrador.
-    """
     result = await get_estado_proyecto_by_id(estado_proyecto_id)
     return result
 
@@ -58,10 +46,6 @@ async def update_single_estado_proyecto(
     estado_proyecto_id: str,
     estado_proyecto_data: EstadoProyecto
 ):
-    """
-    Actualiza un estado de proyecto existente por su ID.
-    Requiere permisos de administrador.
-    """
     result = await update_estado_proyecto(estado_proyecto_id, estado_proyecto_data)
     return result
 
@@ -71,9 +55,5 @@ async def delete_single_estado_proyecto(
     request: Request,
     estado_proyecto_id: str
 ):
-    """
-    Elimina un estado de proyecto por su ID.
-    Requiere permisos de administrador.
-    """
     result = await delete_estado_proyecto(estado_proyecto_id)
     return result

@@ -10,15 +10,11 @@ async def create_tarea(tarea: Tarea) -> Tarea:
     try:
         tarea.actividad = tarea.actividad.strip()
 
-        # Opcional: Podrías añadir validación para las FKs si necesitas que existan en sus colecciones
-        # Por ejemplo, verificar si id_proyecto existe en la colección "proyectos"
-        
         tarea_dict = tarea.model_dump(exclude={"id"})
-        # Asegurarse que las fechas se guarden correctamente
         tarea_dict["fecha_creacion"] = tarea.fecha_creacion
         tarea_dict["fecha_actualizacion"] = tarea.fecha_actualizacion
         if tarea.fecha_fin:
-            tarea_dict["fecha_fin"] = tarea.fecha_fin # Si es Optional, solo se añade si existe
+            tarea_dict["fecha_fin"] = tarea.fecha_fin
         
         inserted = coll.insert_one(tarea_dict)
         tarea.id = str(inserted.inserted_id)
@@ -52,19 +48,13 @@ async def get_tarea_by_id(tarea_id: str) -> Tarea:
 async def update_tarea(tarea_id: str, tarea: Tarea) -> Tarea:
     try:
         tarea.actividad = tarea.actividad.strip()
-
-        # Opcional: Re-validar las FKs si es necesario
-
         tarea_dict = tarea.model_dump(exclude={"id"})
-        # Siempre actualizar la fecha_actualizacion al modificar
         tarea_dict["fecha_actualizacion"] = datetime.now()
-        # Asegurarse de manejar fecha_fin correctamente si es None
         if tarea.fecha_fin is None:
-            # Eliminar el campo si se envía como None y ya existe en BD para limpiarlo
             coll.update_one({"_id": ObjectId(tarea_id)}, {"$unset": {"fecha_fin": ""}})
-            del tarea_dict["fecha_fin"] # Para que no se intente setear a None directamente en el $set
+            del tarea_dict["fecha_fin"]
         elif "fecha_fin" in tarea_dict and tarea_dict["fecha_fin"] is not None:
-             tarea_dict["fecha_fin"] = tarea.fecha_fin # Actualizar el valor
+             tarea_dict["fecha_fin"] = tarea.fecha_fin
 
         result = coll.update_one(
             {"_id": ObjectId(tarea_id)},
@@ -79,14 +69,11 @@ async def update_tarea(tarea_id: str, tarea: Tarea) -> Tarea:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error updating tarea: {str(e)}")
 
-# Manteniendo la opción de desactivar como en tu plantilla
 async def deactivate_tarea(tarea_id: str) -> Tarea:
     try:
-        # Aquí puedes establecer el estado de la tarea a 'desactivada' o 'cancelada'
-        # o a un ID de estado que represente ese concepto.
         result = coll.update_one(
             {"_id": ObjectId(tarea_id)},
-            {"$set": {"estado_tarea": "desactivada"}} # O a un ID de estado "desactivado"
+            {"$set": {"estado_tarea": "desactivada"}}
         )
         if result.modified_count == 0:
             raise HTTPException(status_code=404, detail="Tarea not found")
