@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query, HTTPException, Request
 from models.usuario import Usuario
+from models.usuario_salida import UsuarioSalida
 from controllers.usuario import (
     create_usuario,
     get_usuarios,
@@ -20,7 +21,7 @@ async def create_new_usuario(
     result = await create_usuario(usuario_data)
     return result
 
-@router.get("/", summary="Obtener usuarios", response_model=list[Usuario])
+@router.get("/", summary="Obtener usuarios", response_model=list[UsuarioSalida])
 @validateadmin
 async def get_all_usuarios(
     request: Request,
@@ -30,7 +31,7 @@ async def get_all_usuarios(
     result = await get_usuarios()
     return result[skip : skip + limit]
 
-@router.get("/{usuario_id}", summary="Obtener usuario por ID", response_model=Usuario)
+@router.get("/{usuario_id}", summary="Obtener usuario por ID", response_model=UsuarioSalida)
 @validateuser
 async def get_single_usuario(
     request: Request,

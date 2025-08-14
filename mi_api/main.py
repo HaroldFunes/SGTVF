@@ -31,7 +31,32 @@ app.include_router(usuario_router)
 
 @app.get("/", tags=["General"])
 def read_root():
-    return {"version": "1.0.0", "message": "Bienvenido al Sistema de Gestión de Tareas API"}
+    return {"status":"healthy", "version": "1.0.0", "message": "Bienvenido al Sistema de Gestión de Tareas API"}
+
+@app.get("/health")
+def health_check():
+    try:
+        return {
+            "status": "healthy", 
+            "timestamp": "2025-08-13", 
+            "service": "SGT-api",
+            "environment": "production"
+        }
+    except Exception as e:
+        return {"status": "unhealthy", "error": str(e)}
+
+@app.get("/ready")
+def readiness_check():
+    try:
+        from utils.mongodb import test_connection
+        db_status = test_connection()
+        return {
+            "status": "ready" if db_status else "not_ready",
+            "database": "connected" if db_status else "disconnected",
+            "service": "dulceria-api"
+        }
+    except Exception as e:
+        return {"status": "not_ready", "error": str(e)}
 
 @app.post("/login")
 async def login_access(l : Login):

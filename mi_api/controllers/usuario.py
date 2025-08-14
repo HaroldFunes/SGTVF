@@ -2,9 +2,11 @@ import os
 import json
 import logging
 import requests
+import base64
 import firebase_admin
 from firebase_admin import credentials, auth as firebase_auth
 from models.usuario import Usuario
+from models.usuario_salida import UsuarioSalida
 from utils.mongodb import get_collection
 from fastapi import HTTPException
 from bson import ObjectId
@@ -18,6 +20,31 @@ firebase_admin.initialize_app(cred)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def initialize_firebase():
+    if firebase_admin._apps:
+        return
+
+    try:
+        firebase_creds_base64 = os.getenv("FIREBASE_CREDENTIALS_BASE64")
+
+        if firebase_creds_base64:
+            firebase_creds_json = base64.b64decode(firebase_creds_base64).decode('utf-8')
+            firebase_creds = json.loads(firebase_creds_json)
+            cred = credentials.Certificate(firebase_creds)
+            firebase_admin.initialize_app(cred)
+            logger.info("Firebase initialized with environment variable credentials")
+        else:
+            cred = credentials.Certificate("secrets/SGTFirebase-secrets.json")
+            firebase_admin.initialize_app(cred)
+            logger.info("Firebase initialized with JSON file")
+
+    except Exception as e:
+        logger.error(f"Failed to initialize Firebase: {e}")
+        raise HTTPException(status_code=500, detail=f"Firebase configuration error: {str(e)}")
+
+
+initialize_firebase()
 
 async def create_usuario(usuario: Usuario) -> Usuario:
     registro_usuario = {}
@@ -88,18 +115,18 @@ async def login(user: Login) -> dict:
     }
 
 
-async def get_usuarios() -> list[Usuario]:
+async def get_usuarios() -> list[UsuarioSalida]:
     try:
         usuarios = []
         for doc in coll.find():
             doc['id'] = str(doc['_id'])
             del doc['_id']
-            usuarios.append(Usuario(**doc))
+            usuarios.append(UsuarioSalida(**doc))
         return usuarios
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
 
-async def get_usuario_by_id(usuario_id: str) -> Usuario:
+async def get_usuario_by_id(usuario_id: str) -> UsuarioSalida:
     try:
         doc = coll.find_one({"_id": ObjectId(usuario_id)})
         if not doc:
@@ -107,7 +134,7 @@ async def get_usuario_by_id(usuario_id: str) -> Usuario:
 
         doc['id'] = str(doc['_id'])
         del doc['_id']
-        return Usuario(**doc)
+        return UsuarioSalida(**doc)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
 
