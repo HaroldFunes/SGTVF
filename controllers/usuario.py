@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from dotenv import load_dotenv
 import requests
 import base64
 import firebase_admin
@@ -15,9 +16,7 @@ from models.login import Login
 from utils.security import create_jwt_token
 coll = get_collection("usuarios")
 
-cred = credentials.Certificate("secrets/SGTFirebase-secrets.json")
-firebase_admin.initialize_app(cred)
-
+load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
