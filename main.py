@@ -21,6 +21,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Add CORS
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins for development; restrict in production
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
+
 app.include_router(categoria_tarea_router)
 app.include_router(estado_proyecto_router)
 app.include_router(estado_tarea_router)
