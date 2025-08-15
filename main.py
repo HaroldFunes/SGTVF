@@ -3,7 +3,7 @@ import uvicorn
 from fastapi import FastAPI, Request, HTTPException
 from utils.security import validateadmin, validateuser
 
-from routes.categoria_tarea import router as categoria_tarea_router
+# from routes.categoria_tarea import router as categoria_tarea_router
 from routes.estado_proyecto import router as estado_proyecto_router
 from routes.estado_tarea import router as estado_tarea_router
 from routes.proyecto import router as proyecto_router
