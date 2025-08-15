@@ -31,7 +31,7 @@ jobs:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: |
         python -c "from main import app; print('FASTAPI app imported successfully')"
-
+ 
     - name: Run tests
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
