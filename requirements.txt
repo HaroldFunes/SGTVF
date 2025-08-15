@@ -1,4 +1,4 @@
-pymongo==3.12
+pymongo==4.13.2
 python-dotenv
 fastapi
 uvicorn
